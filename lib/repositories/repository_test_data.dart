@@ -1,37 +1,41 @@
+import 'dart:math';
+
 import 'package:geolocator/geolocator.dart';
 
 import 'package:jogging_app/repositories/repository.dart';
 
-class RepositoryImpl extends Repository{
+class RepositoryTestData extends Repository{
 
-  //データ構造:[time,latitude,longitude,distance]
+  //data structure:[time,latitude,longitude,distance]
   var _result=[];
+  double _latitude=0.0;
+  double _longitude=0.0;
 
-  RepositoryImpl();
+  RepositoryTestData();
 
   Future<void> update() async{
     DateTime _time;
-    double _distance;
-
-    Position position = await _determinePosition();
-
-    _distance = 0.0;
+    double _distance = 0.0;
+    Position _position;
 
     if(_result.length > 0){
-      _distance = Geolocator.distanceBetween(
-        _result[_result.length-1]['latitude'],
-        _result[_result.length-1]['longitude'],
-        position.latitude,
-        position.longitude
-      );
+      _distance = 20.0;
+      _latitude  = _latitude  + ((Random().nextDouble()-0.5)/500);
+      _longitude = _longitude + ((Random().nextDouble()-0.5)/500);
+
+    }
+    else{
+      _position = await _determinePosition();
+      _latitude  = _position.latitude;
+      _longitude = _position.longitude;
     }
 
     _time = DateTime.now();
 
     _result.add({
       'time'     : _time,
-      'latitude' : position.latitude,
-      'longitude': position.longitude,
+      'latitude' : _latitude,
+      'longitude': _longitude,
       'distance' : _distance
     });
 
@@ -77,7 +81,9 @@ class RepositoryImpl extends Repository{
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
   }
+
 
   dynamic getData() {
     return _result;

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'injection_container.dart' as di;
 
 import 'package:jogging_app/presentation/state_controller.dart';
 import 'package:jogging_app/presentation/input_controller.dart';
 import 'package:jogging_app/presentation/display.dart';
 
 void main() async {
-//  await di.init();
+  await di.init();
   runApp(MyApp());
 }
 
@@ -34,11 +35,11 @@ class JoggingApp extends StatelessWidget {
               buildWhen: (prev, state) => (prev.displayUpdate  != state.displayUpdate) ||
                                           (prev.cameraPosition != state.cameraPosition) ,
               builder: (_, state) {
-                //display googlemap and repository data
+                //Googleマップとデータの表示
                 return Display(state);
               },
             ),
-            //user input
+            //ユーザー入力
             InputController(),
             //Text(debug().start().toString()),
           ]

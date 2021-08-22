@@ -1,5 +1,5 @@
 abstract class Repository{
-  Future<bool> update();
+  Future<void> update();
   dynamic getData();
   void clear();
 }

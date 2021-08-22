@@ -5,26 +5,26 @@ class GetDistance{
   GetDistance();
 
   double getDistance(var rawData){
-    List<double> data;
-    double distance;
+    List<double> _data;
+    double _distance;
 
-    data = _makeDistanceData(rawData);
+    _data = _makeDistanceData(rawData);
 
     //距離を計算
-    distance = Distance().calcDistance(data);
+    _distance = Distance().calcDistance(_data);
 
-    return distance;
+    return _distance;
   }
 
   List<double> _makeDistanceData(var rawData){
 
-    List<double> result = [];
+    List<double> _result = [];
 
     for(int i=0; i<rawData.length; i++){
-      result.add(rawData[i]['distance']);
+      _result.add(rawData[i]['distance']);
     }
 
-    return result;
+    return _result;
   }
 
 

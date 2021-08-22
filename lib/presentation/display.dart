@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,11 +12,20 @@ class Display extends StatelessWidget {
   String _distance = '';
   List<List<double>> _mappingData = [];
   List<double> _cameraPosition = [];
+  String _completionTime = '';
 
+  //表示データの単位調整
   Display(AppState state){
-    _distance = state.distance.toStringAsFixed(2).toString();
+    _distance = (state.distance/1000).toStringAsFixed(2).toString();
     _mappingData = state.mappingData;
     _cameraPosition = state.cameraPosition;
+    if(state.completionTime != 0.0) {
+      _completionTime =
+          (((state.completionTime / 1000) / 60)).toStringAsFixed(2).toString();
+    }
+    else{
+      _completionTime = ' - ';
+    }
 
   }
 
@@ -37,7 +45,6 @@ class Display extends StatelessWidget {
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
-                  //polygons: rhombusPolygon(_mappingData),
                   polylines: testPolyline(_mappingData),
                   myLocationEnabled: true,
                 ),
@@ -47,9 +54,8 @@ class Display extends StatelessWidget {
               flex: 1,
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text('$_distance km'),
-                  Text('xxx min jogging'),
-                  Text('xxx min later finish'),
+                  Text('走行距離:$_distance km'),
+                  Text(' 完了予定時間:$_completionTime min'),
                 ]
               ),
             ),
@@ -66,22 +72,9 @@ Set<Polyline> testPolyline(List<List<double>> _mappingData) {
     polygonCords.add(LatLng(0.0, 0.0));
   }
   else{
-    _mappingData.forEach((item){
-      polygonCords.add(LatLng(item[0],item[1]));
+    _mappingData.forEach((item) {
+      polygonCords.add(LatLng(item[0], item[1]));
     });
-    /*
-    for(int i=0; i<_mappingData.length; i++){
-      //polygonCords.add(LatLng(_mappingData[i][0]+(i.toDouble()/10000),_mappingData[i][1]));
-      if (0 == i%2) {
-        polygonCords.add(LatLng(_mappingData[i][0] + (i.toDouble() / 1000),
-            _mappingData[i][1]));
-      }
-      else{
-        polygonCords.add(LatLng(_mappingData[i][0],
-            _mappingData[i][1] + (i.toDouble() / 1000)));
-      }
-    }
-    */
   }
 
   final Set<Polyline>_polyLine = {};
@@ -95,46 +88,4 @@ Set<Polyline> testPolyline(List<List<double>> _mappingData) {
   ),);
 
   return _polyLine;
-  //return _polyLine;
 }
-
-/*
-Set<Polygon> rhombusPolygon(List<List<double>> _mappingData) {
-  final polygonCords = <LatLng>[];
-
-  //ダミーデータ設定
-  if(_mappingData.length == 0){
-    polygonCords.add(LatLng(0.0, 0.0));
-  }
-  else{
-    for(int i=0; i<_mappingData.length; i++){
-      //polygonCords.add(LatLng(_mappingData[i][0]+(i.toDouble()/10000),_mappingData[i][1]));
-      if (0 == i%2) {
-        polygonCords.add(LatLng(_mappingData[i][0] + (i.toDouble() / 10000),
-            _mappingData[i][1]));
-      }
-      else{
-        polygonCords.add(LatLng(_mappingData[i][0],
-            _mappingData[i][1] + (i.toDouble() / 10000)));
-      }
-    }
-  }
-
-  /*
-  _mappingData.forEach((item){
-    polygonCords.add(LatLng(item[0],item[1]));
-  });
-  */
-
-  final polygonSet = <Polygon>{};
-  polygonSet.add(Polygon(
-    polygonId: PolygonId('test'),
-    points: polygonCords,
-    strokeWidth: 3,
-    strokeColor: Colors.blue,
-    fillColor: Colors.lightBlue.withOpacity(0),
-  ));
-
-  return polygonSet;
-}
-*/

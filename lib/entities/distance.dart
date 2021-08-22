@@ -3,12 +3,12 @@ class Distance {
   Distance();
 
   double calcDistance(List<double> data){
-    double distance = 0.0;
+    double _distance = 0.0;
 
     data.forEach((item){
-      distance = distance + item;
+      _distance = _distance + item;
     });
 
-    return distance;
+    return _distance;
   }
 }
