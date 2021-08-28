@@ -37,7 +37,7 @@ class _InputController extends State<InputController> {
           child: TextField(
             controller: _controller,
             decoration: InputDecoration(
-              labelText: 'jogging distance(km)',
+              labelText: '予想走行距離(km)',
             ),
             keyboardType: TextInputType.number,
             onChanged: (value) {
